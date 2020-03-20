@@ -1,0 +1,20 @@
+box: 1science/terraform:0.12.15-python3
+build:
+  steps:
+    - script:
+      name: Configure pip
+      code: |
+        mkdir -p ~/.pip/
+        echo '[global]' > ~/.pip/pip.conf
+        echo "extra-index-url = https://$PYPI_USER:$PYPI_PASSWORD@$PYPI_DOMAIN/simple/" >> ~/.pip/pip.conf
+    - pip-install:
+        requirements_file: requirements.txt
+    - script:
+      name: AWS S3 list objects to export bucket
+      code: |
+        aws s3 ls s3://$S3_EXPORT_BUCKET
+    - script:
+      name: AWS S3 COPY an object to export bucket
+      code: |
+        echo "simple text" > simple_test_file.txt
+        aws s3 cp simple_test_file.txt s3://$S3_EXPORT_BUCKET/simple_test_file.txt --acl bucket-owner-full-control
