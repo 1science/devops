@@ -18,7 +18,3 @@ build:
       code: |
         echo "simple text" > simple_test_file.txt
         aws s3 cp simple_test_file.txt s3://$S3_EXPORT_BUCKET/simple_test_file.txt --acl bucket-owner-full-control
-    - script:
-      name: Remove a file
-      code: |
-        rm simple_test_file.txt
